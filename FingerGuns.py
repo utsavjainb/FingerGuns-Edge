@@ -17,17 +17,19 @@ while True:
         print(data)
 
         if data == "Waiting for Opponent":
-            camera.write_msg("Waiting for Opponent")
+            #camera.write_msg("Waiting for Opponent")
             data = client.get_data()
         elif data == "Make Move":
             continue
             #start timer for hand gesture
         elif data == "Winner":
-            camera.write_msg("Winner")
+            pass
+            #camera.write_msg("Winner")
         elif data == "Loser":
-            camera.write_msg("Loser")
+            pass
+            #camera.write_msg("Loser")
         else:
-            output = 'Error: {}'.format(data["status"])
+            output = 'Error: {}'.format(data)
 
         if key == ord('s'):
             image = camera.capture_hand()
