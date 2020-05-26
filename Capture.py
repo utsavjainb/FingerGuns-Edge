@@ -30,37 +30,43 @@ class Capture:
         # Line thickness of 2 px
         self.thickness = 2
 
-        self.dlab = models.segmentation.deeplabv3_resnet101(pretrained=1).eval()
+        # self.dlab = models.segmentation.deeplabv3_resnet101(pretrained=1).eval()
 
         self.background = './background.jpg'
 
-    def show_camera(self):
-        check, frame = self.webcam.read()
-        frame = imutils.resize(frame, width=700)
+        self.roi = None
 
-        frame = cv2.flip(frame, 1)
+        self.frame = None
 
-        # clone the frame
-        clone = frame.copy()
+    def show_camera(self, display_msg, msg, display_timer, time):
+        check, self.frame = self.webcam.read()
+        self.frame = imutils.resize(self.frame, width=700)
 
-        # get the height and width of the frame
-        (height, width) = frame.shape[:2]
+        self.frame = cv2.flip(self.frame, 1)
+
+        # clone the self.frame
+        clone = self.frame.copy()
+
+        # get the height and width of the self.frame
+        (height, width) = self.frame.shape[:2]
 
         # Using cv2.rectangle() method
         # Draw a rectangle with blue line borders of thickness of 2 px
-        cv2.rectangle(frame, self.start_point, self.end_point, self.color, self.thickness)
+        cv2.rectangle(self.frame, self.start_point, self.end_point, self.color, self.thickness)
 
         # get the ROI
-        self.roi = frame[self.start_point[1]:self.end_point[1], self.start_point[0]:self.end_point[0]]
+        self.roi = self.frame[self.start_point[1]:self.end_point[1], self.start_point[0]:self.end_point[0]]
         self.roi = cv2.flip(self.roi, 1)
 
-        # print(check)  # prints true as long as the webcam is running
-        # print(frame)  # prints matrix values of each framecd
-        cv2.imshow("Capturing", frame)
+        if display_msg:
+            cv2.putText(self.frame, msg, (50, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
-    def write_msg(self, msg):
-        check, frame = self.webcam.read()
-        cv2.imshow(msg, frame)
+        if display_timer:
+            cv2.putText(self.frame, str(time), (60, 65), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+
+        # print(check)  # prints true as long as the webcam is running
+        # print(self.frame)  # prints matrix values of each self.framecd
+        cv2.imshow("Capturing", self.frame)
 
     def capture_hand(self):
         cv2.imwrite(filename='saved_img.jpg', img=self.roi)
@@ -91,8 +97,6 @@ class Capture:
         print("Resized...")
         cv2.imwrite(filename='saved_img-final.jpg', img=img_)
         print("Image saved!")
-
-
 
         return img_
 

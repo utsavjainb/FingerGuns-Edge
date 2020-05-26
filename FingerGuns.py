@@ -1,44 +1,71 @@
 from Gesture import Gesture
 from Capture import Capture
 from Client import Client
+import threading
 import cv2
+import queue
+import time
 import matplotlib.pyplot as plt
 
+que = queue.Queue()
 gesture_rec = Gesture("modelv4.h5")
 camera = Capture()
 client = Client('127.0.0.1', 12345)
-data = client.get_data()
+data = ""
+client.get_data(que)
+frame_count = 0
+display_msg = False
+display_time = False
+time = 0
+msg = ""
+
+if not que.empty():
+    data = que.get()
 
 while True:
     try:
-        camera.show_camera()
+        if not que.empty():
+            data = que.get()
+
         key = cv2.waitKey(1)
 
-        print(data)
+        camera.show_camera(display_msg, msg, display_time, time)
 
         if data == "Waiting for Opponent":
-            #camera.write_msg("Waiting for Opponent")
-            data = client.get_data()
+            display_msg = True
+            msg = "Waiting for Opponent"
+            thread1 = threading.Thread(target=client.get_data, args=(que, ))
+            thread1.start()
         elif data == "Make Move":
-            continue
-            #start timer for hand gesture
+            display_msg = True
+            msg = "Make Your Move"
+            display_time = True
+            frame_count = 50
         elif data == "Winner":
-            pass
-            #camera.write_msg("Winner")
+            display_msg = True
+            msg = "Winner!"
         elif data == "Loser":
-            pass
-            #camera.write_msg("Loser")
-        else:
+            display_msg = True
+            msg = "Loser!"
+        elif data == "error":
             output = 'Error: {}'.format(data)
 
-        if key == ord('s'):
-            image = camera.capture_hand()
-            prediction = gesture_rec.predict(image)
+        data = ""
 
-            print(prediction)
+        if display_time:
+            time = frame_count // 10
+            frame_count -= 1
+            if frame_count == 0:
+                display_time = False
+                image = camera.capture_hand()
+                prediction = gesture_rec.predict(image)
+                print(prediction)
 
-            break
-        elif key == ord('q'):
+
+        # if key == ord('s'):
+        #
+        #     break
+        if key == ord('q'):
             camera.shutdown()
             break
 
