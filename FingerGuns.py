@@ -61,6 +61,11 @@ while True:
                 prediction = gesture_rec.predict(image)
                 print(prediction)
                 client.send_data(str(prediction[0]))
+                display_msg = True
+                msg = "Moved Sent: {}".format(prediction)
+                thread2 = threading.Thread(target=client.get_data, args=(que,))
+                thread2.start()
+
 
         # if key == ord('s'):
         #
