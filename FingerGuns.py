@@ -40,7 +40,7 @@ while True:
             display_msg = True
             msg = "Make Your Move"
             display_time = True
-            frame_count = 50
+            frame_count = 100
         elif data == "Winner":
             display_msg = True
             msg = "Winner!"
@@ -60,7 +60,7 @@ while True:
                 image = camera.capture_hand()
                 prediction = gesture_rec.predict(image)
                 print(prediction)
-
+                client.send_data(str(prediction[0]))
 
         # if key == ord('s'):
         #

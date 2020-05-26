@@ -73,13 +73,13 @@ class Capture:
         # img_nobackground = self.remove_background(self.dlab, "./saved_img.jpg", self.background, show_orig=True)
         # cv2.imwrite(filename='saved_img_removed.jpg', img=img_nobackground)
         cv2.imwrite(filename='saved_img_removed.jpg', img=self.roi)
-        self.webcam.release()
+        # self.webcam.release()
 
         # img_new = cv2.imread('saved_img_removed.jpg', cv2.IMREAD_GRAYSCALE)
         # img_new = cv2.imshow("Captured Image", img_new)
 
         cv2.waitKey(1650)
-        cv2.destroyAllWindows()
+        # cv2.destroyAllWindows()
 
         print("Processing image...")
         img_ = cv2.imread('saved_img_removed.jpg', cv2.IMREAD_ANYCOLOR)
