@@ -1,13 +1,10 @@
 import cv2
 import imutils
-from torchvision import models
-from PIL import Image
-import matplotlib.pyplot as plt
-import torch
 import numpy as np
-import cv2
+import torch
 # Apply the transformations needed
 import torchvision.transforms as T
+from PIL import Image
 
 
 class Capture:

@@ -1,11 +1,10 @@
-from Gesture import Gesture
+import queue
+import threading
+
+import cv2
 from Capture import Capture
 from Client import Client
-import threading
-import cv2
-import queue
-import time
-import matplotlib.pyplot as plt
+from Gesture import Gesture
 
 que = queue.Queue()
 gesture_rec = Gesture("modelv4.h5")
@@ -34,7 +33,7 @@ while True:
         if data == "Waiting for Opponent":
             display_msg = True
             msg = "Waiting for Opponent"
-            thread1 = threading.Thread(target=client.get_data, args=(que, ))
+            thread1 = threading.Thread(target=client.get_data, args=(que,))
             thread1.start()
         elif data == "Make Move":
             display_msg = True
@@ -65,7 +64,6 @@ while True:
                 msg = "Moved Sent: {}".format(prediction)
                 thread2 = threading.Thread(target=client.get_data, args=(que,))
                 thread2.start()
-
 
         # if key == ord('s'):
         #

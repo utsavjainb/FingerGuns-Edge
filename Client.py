@@ -1,6 +1,5 @@
 # Import socket module
 import socket
-import queue
 
 
 class Client:
