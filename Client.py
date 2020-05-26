@@ -1,5 +1,6 @@
 # Import socket module
 import socket
+import queue
 
 
 class Client:
@@ -9,9 +10,10 @@ class Client:
         self.ip = ip
         self.s.connect((self.ip, self.port))
 
-    def get_data(self):
+    def get_data(self, que):
         data = self.s.recv(1024).decode('utf-8')
-        return data
+        print("In Function: {}".format(data))
+        que.put(data)
 
     def send_data(self, data):
         self.s.send(data.encode('utf-8'))
