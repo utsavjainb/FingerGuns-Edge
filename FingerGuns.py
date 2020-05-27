@@ -59,9 +59,18 @@ while True:
                 image = camera.capture_hand()
                 prediction = gesture_rec.predict(image)
                 print(prediction)
-                client.send_data(str(prediction[0]))
-                display_msg = True
                 msg = "Moved Sent: {}".format(prediction)
+
+                if prediction == "RELOAD":
+                    server_data = "1"
+                if prediction == "SHIELD":
+                    server_data = "2"
+                if prediction == "SHOOT":
+                    server_data = "3"
+
+                client.send_data(server_data)
+                display_msg = True
+
                 thread2 = threading.Thread(target=client.get_data, args=(que,))
                 thread2.start()
 

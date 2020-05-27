@@ -1,9 +1,9 @@
 import cv2
 import imutils
 import numpy as np
-import torch
+# import torch
 # Apply the transformations needed
-import torchvision.transforms as T
+# import torchvision.transforms as T
 from PIL import Image
 
 
@@ -104,27 +104,27 @@ class Capture:
         print("Program ended.")
         cv2.destroyAllWindows()
 
-    def remove_background(self, net, path, bgimagepath, show_orig=True, dev='cuda'):
-        img = Image.open(path)
-
-        # if show_orig: plt.imshow(img); plt.axis('off'); plt.show()
-        # Comment the Resize and CenterCrop for better inference results
-        trf = T.Compose([T.Resize(400),
-                         # T.CenterCrop(224),
-                         T.ToTensor(),
-                         T.Normalize(mean=[0.485, 0.456, 0.406],
-                                     std=[0.229, 0.224, 0.225])])
-        inp = trf(img).unsqueeze(0)
-        out = net(inp)['out']
-        om = torch.argmax(out.squeeze(), dim=0).detach().cpu().numpy()
-
-        rgb = self.decode_segmap(om, path, bgimagepath)
-
-        # plt.imshow(rgb);
-        # plt.axis('off');
-        # plt.show()
-
-        return rgb
+    # def remove_background(self, net, path, bgimagepath, show_orig=True, dev='cuda'):
+    #     img = Image.open(path)
+    #
+    #     # if show_orig: plt.imshow(img); plt.axis('off'); plt.show()
+    #     # Comment the Resize and CenterCrop for better inference results
+    #     trf = T.Compose([T.Resize(400),
+    #                      # T.CenterCrop(224),
+    #                      T.ToTensor(),
+    #                      T.Normalize(mean=[0.485, 0.456, 0.406],
+    #                                  std=[0.229, 0.224, 0.225])])
+    #     inp = trf(img).unsqueeze(0)
+    #     out = net(inp)['out']
+    #     om = torch.argmax(out.squeeze(), dim=0).detach().cpu().numpy()
+    #
+    #     rgb = self.decode_segmap(om, path, bgimagepath)
+    #
+    #     # plt.imshow(rgb);
+    #     # plt.axis('off');
+    #     # plt.show()
+    #
+    #     return rgb
 
     # Define the helper function
     def decode_segmap(self, image, source, bgimg, nc=21):
