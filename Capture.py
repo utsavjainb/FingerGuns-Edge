@@ -62,8 +62,8 @@ class Capture:
             cv2.putText(self.frame, str(time), (60, 65), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
         if display_info:
-            cv2.putText(self.frame, "Bullets: {}".format(bullets), (150, 65), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-            cv2.putText(self.frame, "Round: {}".format(rounds), (300, 65), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+            cv2.putText(self.frame, "Bullets: {}".format(bullets), (50, 280), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+            cv2.putText(self.frame, "Round: {}".format(rounds), (50, 340), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
         # print(check)  # prints true as long as the webcam is running
         # print(self.frame)  # prints matrix values of each self.framecd

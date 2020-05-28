@@ -28,8 +28,9 @@ while True:
     try:
         if not que.empty():
             data = que.get()
-            rounds = data["Round"]
-            bullets = data["Bullet Count"]
+            if display_info:
+                rounds = data["Round"]
+                bullets = data["Bullet Count"]
 
         key = cv2.waitKey(1)
 
