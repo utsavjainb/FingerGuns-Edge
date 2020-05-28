@@ -10,7 +10,7 @@ que = queue.Queue()
 gesture_rec = Gesture("modelv4.h5")
 camera = Capture()
 client = Client('127.0.0.1', 12345)
-data = ""
+data = {'status':''}
 client.get_data(que)
 frame_count = 0
 display_msg = False
@@ -30,26 +30,26 @@ while True:
 
         camera.show_camera(display_msg, msg, display_time, time)
 
-        if data == "Waiting for Opponent":
+        if data['status'] == "Waiting for Opponent":
             display_msg = True
             msg = "Waiting for Opponent"
             thread1 = threading.Thread(target=client.get_data, args=(que,))
             thread1.start()
-        elif data == "Make Move":
+        elif data['status'] == "Make Move":
             display_msg = True
             msg = "Make Your Move"
             display_time = True
             frame_count = 100
-        elif data == "Winner":
+        elif data['status'] == "Winner":
             display_msg = True
             msg = "Winner!"
-        elif data == "Loser":
+        elif data['status'] == "Loser":
             display_msg = True
             msg = "Loser!"
-        elif data == "error":
+        elif data['status'] == "error":
             output = 'Error: {}'.format(data)
 
-        data = ""
+        data = {'status': ''}
 
         if display_time:
             time = frame_count // 10

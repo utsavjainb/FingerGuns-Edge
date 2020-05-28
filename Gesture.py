@@ -20,8 +20,8 @@ class Gesture:
 
         # image = image / 255
 
-        # plt.imshow(image, cmap="gray")
-        # plt.show()
+        #plt.imshow(image, cmap="gray")
+        #plt.show()
 
         image = image.reshape(-1, 28, 28, 1)
 
