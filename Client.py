@@ -1,5 +1,6 @@
 # Import socket module
 import socket
+import json
 
 
 class Client:
@@ -11,6 +12,7 @@ class Client:
 
     def get_data(self, que):
         data = self.s.recv(1024).decode('utf-8')
+        data = json.loads(data)
         print("In Function: {}".format(data))
         que.put(data)
 

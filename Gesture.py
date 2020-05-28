@@ -15,13 +15,13 @@ class Gesture:
         print(image.shape)
 
         reload = [19, 3, 16]
-        shoot = [6, 7, 18, 14]
+        shoot = [6, 7, 18, 14, 20, 10]
         shield = [0, 4, 11, 12, 17]
 
         # image = image / 255
 
-        plt.imshow(image, cmap="gray")
-        plt.show()
+        #plt.imshow(image, cmap="gray")
+        #plt.show()
 
         image = image.reshape(-1, 28, 28, 1)
 
