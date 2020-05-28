@@ -15,7 +15,10 @@ client.get_data(que)
 frame_count = 0
 display_msg = False
 display_time = False
+display_info = False
 time = 0
+bullets = 0
+rounds = 0
 msg = ""
 
 if not que.empty():
@@ -25,14 +28,18 @@ while True:
     try:
         if not que.empty():
             data = que.get()
+            rounds = data["Round"]
+            bullets = data["Bullet Count"]
 
         key = cv2.waitKey(1)
 
-        camera.show_camera(display_msg, msg, display_time, time)
+        camera.show_camera(display_msg, msg, display_time, time, display_info, rounds, bullets)
 
         if data['status'] == "Waiting for Opponent":
             display_msg = True
             msg = "Waiting for Opponent"
+            display_info = True
+
             thread1 = threading.Thread(target=client.get_data, args=(que,))
             thread1.start()
         elif data['status'] == "Make Move":
