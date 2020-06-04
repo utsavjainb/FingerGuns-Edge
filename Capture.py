@@ -69,7 +69,15 @@ class Capture:
         # print(self.frame)  # prints matrix values of each self.framecd
         cv2.imshow("Capturing", self.frame)
 
-    def capture_hand(self):
+    def capture_hand2(self):
+        image = self.roi.copy()
+        dim = (64, 64)
+
+        img_ = cv2.resize(image, dim, interpolation=cv2.INTER_AREA)
+
+        return img_
+
+    def capture_hand1(self):
         cv2.imwrite(filename='saved_img.jpg', img=self.roi)
         # img_nobackground = self.remove_background(self.dlab, "./saved_img.jpg", self.background, show_orig=True)
         # cv2.imwrite(filename='saved_img_removed.jpg', img=img_nobackground)

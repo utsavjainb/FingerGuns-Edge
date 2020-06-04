@@ -9,7 +9,22 @@ class Gesture:
 
         print("Model Loaded")
 
-    def predict(self, image):
+    def predict2(self, image):
+        print(image.dtype)
+        print(image.shape)
+
+        resized = image.reshape(1, 64, 64, 3)
+
+        predictions = self.model.predict_classes(resized)
+
+        if predictions[0] == 2:
+            return "RELOAD"
+        if predictions[0] == 1:
+            return "SHOOT"
+        else:
+            return "SHIELD"
+
+    def predict1(self, image):
 
         print(image.dtype)
         print(image.shape)

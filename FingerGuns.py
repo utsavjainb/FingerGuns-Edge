@@ -7,7 +7,7 @@ from Client import Client
 from Gesture import Gesture
 
 que = queue.Queue()
-gesture_rec = Gesture("modelv4.h5")
+gesture_rec = Gesture("modelv6.h5")
 camera = Capture()
 client = Client('127.0.0.1', 12345)
 data = {'status':''}
@@ -64,8 +64,8 @@ while True:
             frame_count -= 1
             if frame_count == 0:
                 display_time = False
-                image = camera.capture_hand()
-                prediction = gesture_rec.predict(image)
+                image = camera.capture_hand2()
+                prediction = gesture_rec.predict2(image)
                 print(prediction)
                 msg = "Moved Sent: {}".format(prediction)
 
