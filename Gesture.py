@@ -13,9 +13,11 @@ class Gesture:
         print(image.dtype)
         print(image.shape)
 
-        resized = image.reshape(1, 64, 64, 3)
+        resized = image.reshape(-1, 28, 28, 1)
 
         predictions = self.model.predict_classes(resized)
+
+        print(predictions[0])
 
         if predictions[0] == 2:
             return "RELOAD"

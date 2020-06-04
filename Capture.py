@@ -71,9 +71,10 @@ class Capture:
 
     def capture_hand2(self):
         image = self.roi.copy()
-        dim = (64, 64)
+        dim = (28, 28)
 
         img_ = cv2.resize(image, dim, interpolation=cv2.INTER_AREA)
+        img_ = cv2.cvtColor(img_, cv2.COLOR_BGR2GRAY)
 
         return img_
 
