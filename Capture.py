@@ -30,12 +30,19 @@ class Capture:
         # self.dlab = models.segmentation.deeplabv3_resnet101(pretrained=1).eval()
 
         self.background = './background.jpg'
+        self.bullets = cv2.imread('./Inventory.png')
+        #self.bullets = imutils.resize(self.bullets, width=100)
+        self.winner = cv2.imread('./Winner.png')
+        self.loser = cv2.imread('./Loser.png')
+        self.rounds = cv2.imread('./Rounds.png')
 
         self.roi = None
 
         self.frame = None
 
     def show_camera(self, display_msg, msg, display_timer, time, display_info, rounds, bullets):
+        alpha = 0.5
+
         check, self.frame = self.webcam.read()
         self.frame = imutils.resize(self.frame, width=700)
 
@@ -62,6 +69,10 @@ class Capture:
             cv2.putText(self.frame, str(time), (60, 65), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
         if display_info:
+            #self.frame = cv2.addWeighted(self.bullets[0:self.bullets.shape[0], 0:self.bullets.shape[1], :], alpha, self.frame, 1 - alpha, 0)
+            #self.frame[150:150+self.bullets.shape[0], 150:150+self.bullets.shape[1]] = bullet_icon
+
+
             cv2.putText(self.frame, "Bullets: {}".format(bullets), (50, 280), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
             cv2.putText(self.frame, "Round: {}".format(rounds), (50, 340), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
