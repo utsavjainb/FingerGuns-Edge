@@ -4,7 +4,6 @@ import numpy as np
 # import torch
 # Apply the transformations needed
 # import torchvision.transforms as T
-from PIL import Image
 
 
 class Capture:
@@ -35,10 +34,10 @@ class Capture:
         self.inventory = cv2.resize(self.inventory, dim, interpolation=cv2.INTER_AREA)
 
         self.winner = cv2.imread('./Winner.png', cv2.IMREAD_UNCHANGED)
-        self.winner = cv2.resize(self.winner, dim, interpolation=cv2.INTER_AREA)
+        self.winner = cv2.resize(self.winner, (200, 200), interpolation=cv2.INTER_AREA)
 
         self.loser = cv2.imread('./Loser.png', cv2.IMREAD_UNCHANGED)
-        self.loser = cv2.resize(self.loser, dim, interpolation=cv2.INTER_AREA)
+        self.loser = cv2.resize(self.loser, (200, 200), interpolation=cv2.INTER_AREA)
 
         self.rounds = cv2.imread('./Rounds.png', cv2.IMREAD_UNCHANGED)
         self.rounds = cv2.resize(self.rounds, dim, interpolation=cv2.INTER_AREA)
@@ -47,7 +46,7 @@ class Capture:
 
         self.frame = None
 
-    def show_camera(self, display_msg, msg, display_timer, time, display_info, rounds, bullets):
+    def show_camera(self, display_msg, msg, display_timer, time, display_info, rounds, bullets, player_move, opp_move):
         alpha = 0.3
 
         check, self.frame = self.webcam.read()
@@ -70,21 +69,38 @@ class Capture:
         self.roi = cv2.flip(self.roi, 1)
 
         if display_msg:
-            cv2.putText(self.frame, msg, (50, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+            if msg == "Winner!":
+                cv2.putText(self.frame, msg, (120, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+                winner_icon = cv2.add(self.frame[120:320, 75:275, :], self.winner[:, :, :3])
+                self.frame[120:320, 75:275] = winner_icon
+            elif msg == "Loser!":
+                cv2.putText(self.frame, msg, (120, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+                loser_icon = cv2.add(self.frame[120:320, 75:275, :], self.loser[:, :, :3])
+                self.frame[120:320, 75:275] = loser_icon
+            else:
+                cv2.putText(self.frame, msg, (50, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
         if display_timer:
-            cv2.putText(self.frame, str(time), (140, 120), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 6, cv2.LINE_AA)
+            cv2.putText(self.frame, str(time), (150, 120), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 6, cv2.LINE_AA)
 
         if display_info:
             bullet_icon = cv2.add(self.frame[320:420, 350:450, :], self.inventory[:, :, :3])
             self.frame[320:420, 350:450] = bullet_icon
 
-            # round_icon = cv2.add(self.frame[340:380, 390:430, :], self.rounds[:40, :40, :3])
-            # self.frame[340:380, 390:430] = round_icon
+            round_icon = cv2.add(self.frame[320:420, 465:565, :], self.rounds[:, :, :3])
+            self.frame[320:420, 465:565] = round_icon
 
+            cv2.putText(self.frame, ": {}".format(bullets), (420, 375), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2,
+                        cv2.LINE_AA)
+            cv2.putText(self.frame, ": {}".format(rounds), (552, 375), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2,
+                        cv2.LINE_AA)
 
-            cv2.putText(self.frame, ": {}".format(bullets), (435, 375), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-            # cv2.putText(self.frame, ": {}".format(rounds), (435, 380), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+            cv2.putText(self.frame, "You: {}".format(player_move), (50, 340), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                        (255, 255, 255), 2,
+                        cv2.LINE_AA)
+            cv2.putText(self.frame, "Opp: {}".format(opp_move), (50, 400), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255),
+                        2,
+                        cv2.LINE_AA)
 
         # print(check)  # prints true as long as the webcam is running
         # print(self.frame)  # prints matrix values of each self.framecd

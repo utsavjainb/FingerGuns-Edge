@@ -19,6 +19,8 @@ display_info = False
 time = 0
 bullets = 0
 rounds = 0
+player_move = ''
+opp_move = ''
 msg = ""
 
 if not que.empty():
@@ -31,10 +33,12 @@ while True:
             if display_info:
                 rounds = data["Round"]
                 bullets = data["Bullet Count"]
+                player_move = data["Player Move"]
+                opp_move = data["Opp Move"]
 
         key = cv2.waitKey(1)
 
-        camera.show_camera(display_msg, msg, display_time, time, display_info, rounds, bullets)
+        camera.show_camera(display_msg, msg, display_time, time, display_info, rounds, bullets, player_move, opp_move)
 
         if data['status'] == "Waiting for Opponent":
             display_msg = True
