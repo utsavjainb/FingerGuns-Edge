@@ -9,6 +9,7 @@ from PIL import Image
 
 class Capture:
     def __init__(self):
+        dim = (100, 100)
         self.webcam = cv2.VideoCapture(0)
         # region of interest (ROI) coordinates
         self.top, self.right, self.bottom, self.left = 375, 625, 325, 75
@@ -30,21 +31,29 @@ class Capture:
         # self.dlab = models.segmentation.deeplabv3_resnet101(pretrained=1).eval()
 
         self.background = './background.jpg'
-        self.bullets = cv2.imread('./Inventory.png')
-        #self.bullets = imutils.resize(self.bullets, width=100)
-        self.winner = cv2.imread('./Winner.png')
-        self.loser = cv2.imread('./Loser.png')
-        self.rounds = cv2.imread('./Rounds.png')
+        self.inventory = cv2.imread('./Inventory.png', cv2.IMREAD_UNCHANGED)
+        self.inventory = cv2.resize(self.inventory, dim, interpolation=cv2.INTER_AREA)
+
+        print(self.inventory.shape)
+
+        self.winner = cv2.imread('./Winner.png', cv2.IMREAD_UNCHANGED)
+        self.winner = cv2.resize(self.winner, dim, interpolation=cv2.INTER_AREA)
+
+        self.loser = cv2.imread('./Loser.png', cv2.IMREAD_UNCHANGED)
+        self.loser = cv2.resize(self.loser, dim, interpolation=cv2.INTER_AREA)
+
+        self.rounds = cv2.imread('./Rounds.png', cv2.IMREAD_UNCHANGED)
+        self.rounds = cv2.resize(self.rounds, dim, interpolation=cv2.INTER_AREA)
 
         self.roi = None
 
         self.frame = None
 
     def show_camera(self, display_msg, msg, display_timer, time, display_info, rounds, bullets):
-        alpha = 0.5
+        alpha = 0.3
 
         check, self.frame = self.webcam.read()
-        self.frame = imutils.resize(self.frame, width=700)
+        self.frame = imutils.resize(self.frame, width=800)
 
         self.frame = cv2.flip(self.frame, 1)
 
@@ -66,15 +75,21 @@ class Capture:
             cv2.putText(self.frame, msg, (50, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
         if display_timer:
-            cv2.putText(self.frame, str(time), (60, 65), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+            cv2.putText(self.frame, str(time), (140, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 4, cv2.LINE_AA)
 
         if display_info:
-            #self.frame = cv2.addWeighted(self.bullets[0:self.bullets.shape[0], 0:self.bullets.shape[1], :], alpha, self.frame, 1 - alpha, 0)
-            #self.frame[150:150+self.bullets.shape[0], 150:150+self.bullets.shape[1]] = bullet_icon
+            print(self.frame[100:140, 340:380].shape)
+            print(self.inventory.shape)
+            print(self.frame.shape)
+            bullet_icon = cv2.add(self.frame[320:420, 350:450, :], self.inventory[:, :, :3])
+            self.frame[320:420, 350:450] = bullet_icon
+
+            # round_icon = cv2.add(self.frame[340:380, 390:430, :], self.rounds[:40, :40, :3])
+            # self.frame[340:380, 390:430] = round_icon
 
 
-            cv2.putText(self.frame, "Bullets: {}".format(bullets), (50, 280), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-            cv2.putText(self.frame, "Round: {}".format(rounds), (50, 340), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+            cv2.putText(self.frame, ": {}".format(bullets), (435, 375), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+            # cv2.putText(self.frame, ": {}".format(rounds), (435, 380), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
         # print(check)  # prints true as long as the webcam is running
         # print(self.frame)  # prints matrix values of each self.framecd
