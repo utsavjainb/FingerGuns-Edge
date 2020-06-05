@@ -34,8 +34,6 @@ class Capture:
         self.inventory = cv2.imread('./Inventory.png', cv2.IMREAD_UNCHANGED)
         self.inventory = cv2.resize(self.inventory, dim, interpolation=cv2.INTER_AREA)
 
-        print(self.inventory.shape)
-
         self.winner = cv2.imread('./Winner.png', cv2.IMREAD_UNCHANGED)
         self.winner = cv2.resize(self.winner, dim, interpolation=cv2.INTER_AREA)
 
@@ -75,12 +73,9 @@ class Capture:
             cv2.putText(self.frame, msg, (50, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
         if display_timer:
-            cv2.putText(self.frame, str(time), (140, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 4, cv2.LINE_AA)
+            cv2.putText(self.frame, str(time), (140, 120), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 6, cv2.LINE_AA)
 
         if display_info:
-            print(self.frame[100:140, 340:380].shape)
-            print(self.inventory.shape)
-            print(self.frame.shape)
             bullet_icon = cv2.add(self.frame[320:420, 350:450, :], self.inventory[:, :, :3])
             self.frame[320:420, 350:450] = bullet_icon
 
