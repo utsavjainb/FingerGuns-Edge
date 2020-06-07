@@ -3,9 +3,9 @@ import threading
 
 import cv2
 
-from .Capture import Capture
-from .Client import Client
-from .Gesture import Gesture
+from Capture import Capture
+from Client import Client
+from Gesture import Gesture
 
 que = queue.Queue()
 gesture_rec = Gesture("modelv13.h5")
