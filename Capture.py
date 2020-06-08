@@ -121,12 +121,14 @@ class Capture:
             cv2.putText(self.frame, ": {}".format(rounds), (552, 375), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2,
                         cv2.LINE_AA)
 
-            cv2.putText(self.frame, "You: {}".format(player_move), (50, 340), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                        (255, 255, 255), 2,
-                        cv2.LINE_AA)
-            cv2.putText(self.frame, "Opp: {}".format(opp_move), (50, 400), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255),
-                        2,
-                        cv2.LINE_AA)
+            if not (msg == "Winner!" or msg == "Loser!"):
+                cv2.putText(self.frame, "You: {}".format(player_move), (50, 340), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                            (255, 255, 255), 2,
+                            cv2.LINE_AA)
+                cv2.putText(self.frame, "Opp: {}".format(opp_move), (50, 400), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                            (255, 255, 255),
+                            2,
+                            cv2.LINE_AA)
 
         # print(check)  # prints true as long as the webcam is running
         # print(self.frame)  # prints matrix values of each self.framecd
