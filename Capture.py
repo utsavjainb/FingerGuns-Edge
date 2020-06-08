@@ -1,6 +1,13 @@
 import cv2
 import imutils
+import matplotlib
 import numpy as np
+
+matplotlib.use("Agg")
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
 # import torch
 # Apply the transformations needed
 # import torchvision.transforms as T
@@ -46,7 +53,8 @@ class Capture:
 
         self.frame = None
 
-    def show_camera(self, display_msg, msg, display_timer, time, display_info, rounds, bullets, player_move, opp_move):
+    def show_camera(self, display_msg, msg, display_timer, time, display_info, rounds, bullets, player_move, opp_move,
+                    stat_data):
         alpha = 0.3
 
         check, self.frame = self.webcam.read()
@@ -73,10 +81,28 @@ class Capture:
                 cv2.putText(self.frame, msg, (120, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
                 winner_icon = cv2.add(self.frame[120:320, 75:275, :], self.winner[:, :, :3])
                 self.frame[120:320, 75:275] = winner_icon
+
+                img = self.draw_graph(stat_data)
+                img = cv2.resize(img, (250, 250), interpolation=cv2.INTER_AREA)
+                graph = cv2.addWeighted(
+                    self.frame[self.start_point[1]:self.end_point[1], self.start_point[0]:self.end_point[0]], 0, img, 1,
+                    0)
+                self.frame[self.start_point[1]:self.end_point[1], self.start_point[0]:self.end_point[0]] = graph
+
+
             elif msg == "Loser!":
                 cv2.putText(self.frame, msg, (120, 120), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
                 loser_icon = cv2.add(self.frame[120:320, 75:275, :], self.loser[:, :, :3])
                 self.frame[120:320, 75:275] = loser_icon
+
+                img = self.draw_graph(stat_data)
+                img = cv2.resize(img, (250, 250), interpolation=cv2.INTER_AREA)
+                graph = cv2.addWeighted(
+                    self.frame[self.start_point[1]:self.end_point[1], self.start_point[0]:self.end_point[0]], 0, img, 1,
+                    0)
+                self.frame[self.start_point[1]:self.end_point[1], self.start_point[0]:self.end_point[0]] = graph
+
+
             else:
                 cv2.putText(self.frame, msg, (50, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
@@ -105,6 +131,26 @@ class Capture:
         # print(check)  # prints true as long as the webcam is running
         # print(self.frame)  # prints matrix values of each self.framecd
         cv2.imshow("Capturing", self.frame)
+
+    def draw_graph(self, data):
+        colors = ["#ba6a61", "#6182ba", "#61ba7d", "#ba6a61", "#6182ba", "#61ba7d", ]
+        sns.set_style("white")
+        temp = dict()
+        temp["Me"] = data["PStats"]
+        temp["Opp"] = data["OppStats"]
+        df = pd.DataFrame(temp)
+
+        fig, ax = plt.subplots()
+        df.T.plot(title="Game Statistics", ax=ax, color=sns.color_palette(colors), kind='bar', figsize=(7, 7),
+                  stacked=True)
+        fig.canvas.draw()
+        img = np.fromstring(fig.canvas.tostring_rgb(), dtype=np.uint8)
+        img = img.reshape(fig.canvas.get_width_height()[::-1] + (3,))
+        img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+
+        return img
+
+
 
     def capture_hand2(self):
         image = self.roi.copy()

@@ -2,10 +2,9 @@ import queue
 import threading
 
 import cv2
-
-from .Capture import Capture
-from .Client import Client
-from .Gesture import Gesture
+from Capture import Capture
+from Client import Client
+from Gesture import Gesture
 
 que = queue.Queue()
 gesture_rec = Gesture("modelv13.h5")
@@ -23,6 +22,7 @@ rounds = 0
 player_move = ''
 opp_move = ''
 msg = ""
+stat_data = dict()
 
 if not que.empty():
     data = que.get()
@@ -39,8 +39,8 @@ while True:
 
         key = cv2.waitKey(1)
 
-        camera.show_camera(display_msg, msg, display_time, time, display_info, rounds, bullets, player_move, opp_move)
-
+        camera.show_camera(display_msg, msg, display_time, time, display_info, rounds, bullets, player_move, opp_move,
+                           stat_data)
         if data['status'] == "Waiting for Opponent":
             display_msg = True
             msg = "Waiting for Opponent"
@@ -56,9 +56,13 @@ while True:
         elif data['status'] == "Winner":
             display_msg = True
             msg = "Winner!"
+            stat_data["PStats"] = data["PStats"]
+            stat_data["OppStats"] = data["OppStats"]
         elif data['status'] == "Loser":
             display_msg = True
             msg = "Loser!"
+            stat_data["PStats"] = data["PStats"]
+            stat_data["OppStats"] = data["OppStats"]
         elif data['status'] == "error":
             output = 'Error: {}'.format(data)
 
