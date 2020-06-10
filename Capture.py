@@ -109,7 +109,7 @@ class Capture:
         if display_timer:
             cv2.putText(self.frame, str(time), (150, 120), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 6, cv2.LINE_AA)
 
-        if display_info:
+        if display_info and not (msg == "Winner!" or msg == "Loser!"):
             bullet_icon = cv2.add(self.frame[320:420, 350:450, :], self.inventory[:, :, :3])
             self.frame[320:420, 350:450] = bullet_icon
 
@@ -120,15 +120,13 @@ class Capture:
                         cv2.LINE_AA)
             cv2.putText(self.frame, ": {}".format(rounds), (552, 375), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2,
                         cv2.LINE_AA)
-
-            if not (msg == "Winner!" or msg == "Loser!"):
-                cv2.putText(self.frame, "You: {}".format(player_move), (50, 340), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                            (255, 255, 255), 2,
-                            cv2.LINE_AA)
-                cv2.putText(self.frame, "Opp: {}".format(opp_move), (50, 400), cv2.FONT_HERSHEY_SIMPLEX, 1,
-                            (255, 255, 255),
-                            2,
-                            cv2.LINE_AA)
+            cv2.putText(self.frame, "You: {}".format(player_move), (50, 340), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                        (255, 255, 255), 2,
+                        cv2.LINE_AA)
+            cv2.putText(self.frame, "Opp: {}".format(opp_move), (50, 400), cv2.FONT_HERSHEY_SIMPLEX, 1,
+                        (255, 255, 255),
+                        2,
+                        cv2.LINE_AA)
 
         # print(check)  # prints true as long as the webcam is running
         # print(self.frame)  # prints matrix values of each self.framecd
